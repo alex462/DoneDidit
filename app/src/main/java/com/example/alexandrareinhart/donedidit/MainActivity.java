@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -16,6 +18,8 @@ import com.example.alexandrareinhart.donedidit.ViewFragments.AddNewFragment;
 import com.example.alexandrareinhart.donedidit.ViewFragments.ViewAllFragment;
 import com.example.alexandrareinhart.donedidit.ViewFragments.ViewCompletedFragment;
 import com.example.alexandrareinhart.donedidit.ViewFragments.ViewIncompleteFragment;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,11 +30,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
     private ViewPagerAdapter viewPagerAdapter;
     private TaskDatabase taskDatabase;
     private TaskAdapter taskAdapter;
+    private LinearLayoutManager linearLayoutManager;
+    private List<Task> tasksList;
 
     @BindView(R.id.tab_layout)
     protected TabLayout tabLayout;
     @BindView(R.id.view_pager)
     protected ViewPager viewPager;
+    @BindView(R.id.main_recycler_view)
+    protected RecyclerView mainRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +63,13 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setElevation(0);
+
+        linearLayoutManager = new LinearLayoutManager(this);
+//        taskAdapter = new TaskAdapter(taskDatabase.taskDao().getTasks(), this);
+        taskDatabase = ((TaskApplication) getApplication()).getDatabase();
+
+        mainRecycler.setLayoutManager(linearLayoutManager);
+        mainRecycler.setAdapter(taskAdapter);
     }
 
     @Override
@@ -63,16 +78,35 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
         return getApplicationContext();
     }
 
+    private void setUpRecyclerView() {
+
+
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        taskAdapter = new TaskAdapter(taskDatabase.taskDao().getTasks(), this);
+
+//        mainRecycler.setLayoutManager(linearLayoutManager);
+//        mainRecycler.setAdapter(taskAdapter);
+
+        taskAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void addClicked() {
 
-//        setUpRecyclerView();
-
-//        getSupportFragmentManager().beginTransaction().remove(AddNewFragment).commit();
-
-
-        taskAdapter.updateList(taskDatabase.taskDao().getTasks());
+        setUpRecyclerView();
         AddNewFragment addNewFragment = AddNewFragment.newInstance();
+
+        addNewFragment.attachParent(this);
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.view_pager, addNewFragment).commit();
+
+
+//        getSupportFragmentManager().beginTransaction().commit();
+        mainRecycler.setAdapter(taskAdapter);
+        taskAdapter = new TaskAdapter(tasksList);
+        taskAdapter.updateList(taskDatabase.taskDao().getTasks());
+
+
 
         View view = this.getCurrentFocus();
         if (view != null) {

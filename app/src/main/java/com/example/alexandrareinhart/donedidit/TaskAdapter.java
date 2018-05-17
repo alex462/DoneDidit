@@ -1,5 +1,6 @@
 package com.example.alexandrareinhart.donedidit;
 
+import android.arch.persistence.room.Ignore;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -28,6 +29,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 //        this.context = context;
         this.tasksList = tasksList;
         this.adapterCallback = adapterCallback;
+    }
+
+    @Ignore
+    public TaskAdapter(List<Task> tasksList) {
+
     }
 
     @NonNull

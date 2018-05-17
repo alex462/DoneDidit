@@ -12,10 +12,12 @@ import android.widget.Toast;
 
 import com.example.alexandrareinhart.donedidit.R;
 import com.example.alexandrareinhart.donedidit.Task;
+import com.example.alexandrareinhart.donedidit.TaskAdapter;
 import com.example.alexandrareinhart.donedidit.TaskApplication;
 import com.example.alexandrareinhart.donedidit.TaskDatabase;
 
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +27,8 @@ public class AddNewFragment extends Fragment {
     
     private ActivityCallback activityCallback;
     private TaskDatabase taskDatabase;
+    private TaskAdapter taskAdapter;
+    private List<Task> tasksList;
     
     @BindView(R.id.title_input_editText)
     protected TextInputEditText titleEditText;
@@ -48,7 +52,9 @@ public class AddNewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
         taskDatabase = ((TaskApplication) getActivity().getApplication()).getDatabase();
+
     }
 
     public static AddNewFragment newInstance() {
@@ -69,16 +75,21 @@ public class AddNewFragment extends Fragment {
 //            Toast.makeText(getActivity(), "submit call made, unsuccessful", Toast.LENGTH_SHORT).show();
 
             Task task = new Task(titleEditText.getText().toString(), detailsEditText.getText().toString(), new Date());
+
             addTaskToDatabase(task);
+            Toast.makeText(getActivity(), "TASK ADDED SUCCESSFULLY", Toast.LENGTH_LONG).show();
         }
     }
 
     private void addTaskToDatabase(final Task task) {
 
+        taskAdapter = new TaskAdapter(tasksList);
         taskDatabase.taskDao().addTask(task);
+        taskAdapter.updateList(taskDatabase.taskDao().getTasks());
+
         activityCallback.addClicked();
 
-        Toast.makeText(getActivity(), "TASK ADDED SUCCESSFULLY", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "call to database made", Toast.LENGTH_LONG).show();
     }
 
     public void attachParent(ActivityCallback activityCallback) {

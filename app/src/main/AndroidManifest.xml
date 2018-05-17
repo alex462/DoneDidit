@@ -3,6 +3,7 @@
     package="com.example.alexandrareinhart.donedidit">
 
     <application
+        android:name=".TaskApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="DONE DIDit"

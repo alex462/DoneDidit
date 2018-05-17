@@ -2,6 +2,7 @@ package com.example.alexandrareinhart.donedidit;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -43,5 +44,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_view_all);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_view_incomplete);
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_view_completed);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setElevation(0);
     }
 }

@@ -2,8 +2,10 @@
 <resources>
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryLight">#aaaaaa</color>
-    <color name="colorAccent">#0038ff</color>
+    <color name="colorAccent">#bae1ff</color>
     <color name="paleGreen">#a8e6cf</color>
     <color name="paleRed">#ffaaa5</color>
     <color name="paleBlue">#bae1ff</color>
+    <color name="colorGray">#aaaaaa</color>
+    <color name="electricBlue">#0038ff</color>
 </resources>

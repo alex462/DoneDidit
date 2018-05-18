@@ -48,7 +48,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        viewPagerAdapter.AddFragment(new AddNewFragment(), "NEW");
+        AddNewFragment addNewFragment = AddNewFragment.newInstance();
+        addNewFragment.attachParent(this);
+        viewPagerAdapter.AddFragment(addNewFragment, "NEW");
         viewPagerAdapter.AddFragment(new ViewAllFragment(), "ALL");
         viewPagerAdapter.AddFragment(new ViewIncompleteFragment(), "INCOMPLETE");
         viewPagerAdapter.AddFragment(new ViewCompletedFragment(), "COMPLETED");
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
 //        getSupportFragmentManager().beginTransaction().commit();
         mainRecycler.setAdapter(taskAdapter);
-        taskAdapter = new TaskAdapter(tasksList);
+        taskAdapter = new TaskAdapter(tasksList, this);
         taskAdapter.updateList(taskDatabase.taskDao().getTasks());
 
 

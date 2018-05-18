@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddNewFragment extends Fragment {
+public class AddNewFragment extends Fragment implements TaskAdapter.AdapterCallback {
     
     private ActivityCallback activityCallback;
     private TaskDatabase taskDatabase;
@@ -83,7 +83,7 @@ public class AddNewFragment extends Fragment {
 
     private void addTaskToDatabase(final Task task) {
 
-        taskAdapter = new TaskAdapter(tasksList);
+        taskAdapter = new TaskAdapter(tasksList, this);
         taskDatabase.taskDao().addTask(task);
         taskAdapter.updateList(taskDatabase.taskDao().getTasks());
 
@@ -95,6 +95,16 @@ public class AddNewFragment extends Fragment {
     public void attachParent(ActivityCallback activityCallback) {
 
         this.activityCallback = activityCallback;
+    }
+
+    @Override
+    public void rowClicked(Task task) {
+
+    }
+
+    @Override
+    public void rowLongClicked(Task task) {
+
     }
 
     public interface ActivityCallback {

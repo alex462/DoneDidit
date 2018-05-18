@@ -5,7 +5,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -20,13 +22,14 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>  {
 
-    private List<Task> tasksList;
+    private List<Task> allTasksList;
     private AdapterCallback adapterCallback;
 
-    public TaskAdapter(List<Task> tasksList, AdapterCallback adapterCallback) {
-        this.tasksList = tasksList;
+
+    public TaskAdapter(List<Task> allTasksList, AdapterCallback adapterCallback) {
+        this.allTasksList = allTasksList;
         this.adapterCallback = adapterCallback;
     }
 
@@ -35,28 +38,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task, parent, false);
         return new ViewHolder(view);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bindTask(tasksList.get(position));
-        holder.title.setText(tasksList.get(position).getTaskTitle());
+        holder.bindTask(allTasksList.get(position));
+        holder.title.setText(allTasksList.get(position).getTaskTitle());
 //        holder.dueDate.setText(tasksList.get(position).getDate());
-        holder.details.setText(tasksList.get(position).getTaskDetails());
-        holder.itemView.setOnClickListener(holder.onClick(tasksList.get(position)));
-        holder.itemView.setOnLongClickListener(holder.onLongClick(tasksList.get(position)));
+        holder.details.setText(allTasksList.get(position).getTaskDetails());
+        holder.itemView.setOnClickListener(holder.onClick(allTasksList.get(position)));
+        holder.itemView.setOnLongClickListener(holder.onLongClick(allTasksList.get(position)));
     }
 
     @Override
     public int getItemCount() {
-        return tasksList.size();
+        return allTasksList.size();
     }
 
     public void updateList(List<Task> list) {
 
-        tasksList = list;
+        allTasksList = list;
         notifyDataSetChanged();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

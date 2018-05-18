@@ -25,4 +25,13 @@ public class ViewCompletedFragment extends Fragment {
         ButterKnife.bind(this, view);
         return view;
     }
+
+    public static ViewCompletedFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        ViewCompletedFragment fragment = new ViewCompletedFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 }

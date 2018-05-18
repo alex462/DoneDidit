@@ -24,4 +24,9 @@
     <string name="submit">SUBMIT</string>
     <string name="confirm">CONFIRM</string>
     <string name="cancel">@android:string/cancel</string>
+    <string name="task_all_caps">TASK</string>
+    <string name="string_variable">%1$s</string>
+    <string name="details_all_caps">DETAILS</string>
+    <string name="due_variable">DUE %1$S</string>
+    <string name="ok_all_caps">OK</string>
 </resources>

@@ -23,11 +23,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.alexandrareinhart.donedidit.MainActivity.ALL_TASKS_LIST;
+
 public class ViewAllFragment extends Fragment {
 
     @BindView(R.id.view_all_recycler)
     protected RecyclerView viewAllRecycler;
-    private List<Task> taskList;
+    private List<Task> allTasksList;
     private TaskAdapter taskAdapter;
     private TaskDatabase taskDatabase;
 
@@ -52,7 +54,20 @@ public class ViewAllFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         taskDatabase = ((TaskApplication) getActivity().getApplication()).getDatabase();
-        taskList = new ArrayList<>();
-        taskList.add(new Task());
+        allTasksList = new ArrayList<>();
+        allTasksList = getArguments().getParcelableArrayList(ALL_TASKS_LIST);
+        //TODO - find where allTasksList is declared as List instead of ArrayList and fix, or why "List" is required in this Parcelable instead of ArrayList
+        allTasksList.add(new Task());
     }
+
+    public static ViewAllFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        ViewAllFragment fragment = new ViewAllFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
 }

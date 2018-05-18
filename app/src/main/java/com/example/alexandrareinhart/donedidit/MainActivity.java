@@ -2,6 +2,7 @@ package com.example.alexandrareinhart.donedidit;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import com.example.alexandrareinhart.donedidit.ViewFragments.ViewAllFragment;
 import com.example.alexandrareinhart.donedidit.ViewFragments.ViewCompletedFragment;
 import com.example.alexandrareinhart.donedidit.ViewFragments.ViewIncompleteFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,7 +33,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
     private TaskDatabase taskDatabase;
     private TaskAdapter taskAdapter;
     private LinearLayoutManager linearLayoutManager;
-    private List<Task> tasksList;
+    private List<Task> allTasksList;
+    private List<Task> incompleteTasksList;
+    private List<Task> completedTasksList;
+    private AddNewFragment addNewFragment;
+    private ViewAllFragment viewAllFragment;
+    public static final String ALL_TASKS_LIST = "all_tasks_list";
 
     @BindView(R.id.tab_layout)
     protected TabLayout tabLayout;
@@ -39,12 +46,18 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
     protected ViewPager viewPager;
     @BindView(R.id.main_recycler_view)
     protected RecyclerView mainRecycler;
+//    @BindView(R.id.view_all_recycler)
+//    protected RecyclerView viewAllRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        allTasksList = new ArrayList<>();
+        incompleteTasksList = new ArrayList<>();
+        completedTasksList = new ArrayList<>();
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -86,9 +99,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         taskAdapter = new TaskAdapter(taskDatabase.taskDao().getTasks(), this);
 
-//        mainRecycler.setLayoutManager(linearLayoutManager);
-//        mainRecycler.setAdapter(taskAdapter);
-
         taskAdapter.notifyDataSetChanged();
     }
 
@@ -100,12 +110,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
         addNewFragment.attachParent(this);
 
-//        getSupportFragmentManager().beginTransaction().replace(R.id.view_pager, addNewFragment).commit();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(ALL_TASKS_LIST, (ArrayList<? extends Parcelable>) allTasksList);
+        viewAllFragment.setArguments(bundle);
 
-
-//        getSupportFragmentManager().beginTransaction().commit();
         mainRecycler.setAdapter(taskAdapter);
-        taskAdapter = new TaskAdapter(tasksList, this);
+        taskAdapter = new TaskAdapter(allTasksList, this);
         taskAdapter.updateList(taskDatabase.taskDao().getTasks());
 
 
@@ -115,13 +125,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-
-
     }
 
     @Override
     public void rowClicked(Task task) {
-
+        if(task.isCompleted()){
+            markIncomplete(task);
+        } else {
+            markCompleted(task);
+        }
     }
 
     @Override
@@ -147,5 +159,56 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
 
+    }
+
+    private void markIncomplete(final Task task) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mark task incomplete?")
+                .setMessage("Are you sure you want to mark this task as \"incomplete\"?")
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        task.setCompleted(false);
+                        taskDatabase.taskDao().updateTask(task); //update task
+                        taskAdapter.updateList(taskDatabase.taskDao().getTasks()); //adapter updates view
+                        Toast.makeText(MainActivity.this, "TASK INCOMPLETE", Toast.LENGTH_LONG).show(); //Toast to confirm incomplete
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private void markCompleted(final Task task) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mark task complete?")
+                .setMessage("Are you sure you want to mark this task as \"completed\"?")
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        task.setCompleted(true);
+                        //update database with task info
+                        taskDatabase.taskDao().updateTask(task);
+                        //inform adapter; adapter updates view accordingly
+                        taskAdapter.updateList(taskDatabase.taskDao().getTasks());
+
+                        Toast.makeText(MainActivity.this, "TASK COMPLETED", Toast.LENGTH_LONG).show(); //Toast to confirm completed
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

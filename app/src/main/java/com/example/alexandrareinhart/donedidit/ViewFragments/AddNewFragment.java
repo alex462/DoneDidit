@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class AddNewFragment extends Fragment implements TaskAdapter.AdapterCallb
     private ActivityCallback activityCallback;
     private TaskDatabase taskDatabase;
     private TaskAdapter taskAdapter;
-    private List<Task> tasksList;
+    private List<Task> allTasksList;
     
     @BindView(R.id.title_input_editText)
     protected TextInputEditText titleEditText;
@@ -78,12 +79,19 @@ public class AddNewFragment extends Fragment implements TaskAdapter.AdapterCallb
 
             addTaskToDatabase(task);
             Toast.makeText(getActivity(), "TASK ADDED SUCCESSFULLY", Toast.LENGTH_LONG).show();
+            titleEditText.getText().clear();
+            detailsEditText.getText().clear();
+            dateEditText.getText().clear();
+//            View view = getLayoutInflater().inflate(R.layout.fragment_add_new, AddNewFragment).commit();
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(AddNewFragment.this).attach(AddNewFragment.this).commit();
         }
     }
 
     private void addTaskToDatabase(final Task task) {
 
-        taskAdapter = new TaskAdapter(tasksList, this);
+        taskAdapter = new TaskAdapter(allTasksList, this);
         taskDatabase.taskDao().addTask(task);
         taskAdapter.updateList(taskDatabase.taskDao().getTasks());
 

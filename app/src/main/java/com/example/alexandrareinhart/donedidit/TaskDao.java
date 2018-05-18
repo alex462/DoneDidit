@@ -6,14 +6,15 @@ import android.arch.persistence.room.Dao;
         import android.arch.persistence.room.Query;
         import android.arch.persistence.room.Update;
 
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface TaskDao {
 
     //get all tasks
     @Query("SELECT * FROM task")
-    List<Task> getTasks();
+    ArrayList<Task> getTasks();
 
     //add a single task to list
     @Insert

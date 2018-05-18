@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryLight">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TASK"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold|italic"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%1$s"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DETAILS"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold|italic"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%1$s"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DUE %1$S"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold|italic"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"/>
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

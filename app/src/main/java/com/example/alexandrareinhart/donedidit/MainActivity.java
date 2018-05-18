@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         taskDatabase.taskDao().deleteTask(task); //delete task from database
                         taskAdapter.updateList(taskDatabase.taskDao().getTasks()); //adapter updates view
                         Toast.makeText(MainActivity.this, "TASK COMPLETED", Toast.LENGTH_SHORT).show();

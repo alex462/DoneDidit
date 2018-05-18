@@ -88,20 +88,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             title.setText(task.getTaskTitle());
             dueDate.setText(adapterCallback.getContext().getString(R.string.complete_by_date, formatter.format(date)));
 
-            if(task.isPriority()) {
-                rowLayout.setBackgroundResource(R.color.paleRed);
+//            if(task.isPriority()) {
+//                rowLayout.setBackgroundResource(R.color.paleRed);
 //            }
 
-//            if(task.isCompleted()) {
-//                completedDate.setVisibility(View.VISIBLE);
+            if(task.isCompleted()) {
+                completedDate.setVisibility(View.VISIBLE);
 //                Calendar calendar = Calendar.getInstance();
-//                calendar.setTime(task.getDate());
+                calendar.setTime(task.getDate());
 //                Date date = calendar.getTime();
 //                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/YYYY", Locale.US);
-//                completedDate.setText(adapterCallback.getContext().getString(R.string.completed_on_date, formatter.format(date)));
+                completedDate.setText(adapterCallback.getContext().getString(R.string.completed_on_date, formatter.format(date)));
+                rowLayout.setBackgroundResource(R.color.paleBlue);
 //                completedTasks.add(task);
-//
-//            } else {
+
+            } else {
                 rowLayout.setBackgroundResource(R.color.paleGreen);
                 completedDate.setVisibility(View.INVISIBLE);
 //                incompleteTasks.add(task);

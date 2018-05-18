@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -21,27 +22,19 @@ import butterknife.ButterKnife;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
-    private Context context;
     private List<Task> tasksList;
     private AdapterCallback adapterCallback;
 
     public TaskAdapter(List<Task> tasksList, AdapterCallback adapterCallback) {
-//        this.context = context;
         this.tasksList = tasksList;
         this.adapterCallback = adapterCallback;
-    }
-
-    @Ignore
-    public TaskAdapter(List<Task> tasksList) {
-
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_task, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -68,7 +61,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.item_row)
-        protected ConstraintLayout rowLayout;
+        protected LinearLayout rowLayout;
         @BindView(R.id.task_title_textView)
         protected TextView title;
         @BindView(R.id.instructions_for_details_textView)
@@ -91,7 +84,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(task.getDate());
             Date date = calendar.getTime();
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/YY", Locale.US);
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy", Locale.US);
             title.setText(task.getTaskTitle());
             dueDate.setText(adapterCallback.getContext().getString(R.string.complete_by_date, formatter.format(date)));
 

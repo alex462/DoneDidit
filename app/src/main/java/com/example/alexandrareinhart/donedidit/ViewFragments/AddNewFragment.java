@@ -78,14 +78,19 @@ public class AddNewFragment extends Fragment implements TaskAdapter.AdapterCallb
             Task task = new Task(titleEditText.getText().toString(), detailsEditText.getText().toString(), new Date());
 
             addTaskToDatabase(task);
-            Toast.makeText(getActivity(), "TASK ADDED SUCCESSFULLY", Toast.LENGTH_LONG).show();
-            titleEditText.getText().clear();
-            detailsEditText.getText().clear();
-            dateEditText.getText().clear();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+            //Reset fields in fragment
+            ft.detach(AddNewFragment.this).attach(AddNewFragment.this).commit();
+//            activityCallback.saveTask(task);
+
+//            titleEditText.getText().clear();
+//            detailsEditText.getText().clear();
+//            dateEditText.getText().clear();
 //            View view = getLayoutInflater().inflate(R.layout.fragment_add_new, AddNewFragment).commit();
 
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.detach(AddNewFragment.this).attach(AddNewFragment.this).commit();
+
+
         }
     }
 
@@ -95,7 +100,7 @@ public class AddNewFragment extends Fragment implements TaskAdapter.AdapterCallb
         taskDatabase.taskDao().addTask(task);
         taskAdapter.updateList(taskDatabase.taskDao().getTasks());
 
-        activityCallback.addClicked();
+//        activityCallback.addClicked();
 
         Toast.makeText(getActivity(), "call to database made", Toast.LENGTH_LONG).show();
     }
@@ -118,5 +123,6 @@ public class AddNewFragment extends Fragment implements TaskAdapter.AdapterCallb
     public interface ActivityCallback {
 
         void addClicked();
+        void saveTask(Task task);
     }
 }

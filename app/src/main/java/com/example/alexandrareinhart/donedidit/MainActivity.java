@@ -110,9 +110,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
         addNewFragment.attachParent(this);
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(ALL_TASKS_LIST, (ArrayList<? extends Parcelable>) allTasksList);
-        viewAllFragment.setArguments(bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelableArrayList(ALL_TASKS_LIST, (ArrayList<? extends Parcelable>) allTasksList);
+//        viewAllFragment.setArguments(bundle);
 
         mainRecycler.setAdapter(taskAdapter);
         taskAdapter = new TaskAdapter(allTasksList, this);
@@ -159,6 +159,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
 
+    }
+
+    @Override
+    public void saveTask(Task task){
+        allTasksList.add(task);
+        Toast.makeText(this, "TASK ADDED", Toast.LENGTH_LONG).show();
     }
 
     private void markIncomplete(final Task task) {

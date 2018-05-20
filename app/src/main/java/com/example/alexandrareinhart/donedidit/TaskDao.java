@@ -14,7 +14,7 @@ public interface TaskDao {
 
     //get all tasks
     @Query("SELECT * FROM task")
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
     //add a single task to list
     @Insert

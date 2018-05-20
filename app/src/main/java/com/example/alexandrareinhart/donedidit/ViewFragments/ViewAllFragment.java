@@ -33,6 +33,7 @@ public class ViewAllFragment extends Fragment {
     private TaskAdapter taskAdapter;
     private TaskDatabase taskDatabase;
 
+
     public ViewAllFragment() {
 
     }
@@ -55,9 +56,9 @@ public class ViewAllFragment extends Fragment {
 
         taskDatabase = ((TaskApplication) getActivity().getApplication()).getDatabase();
         allTasksList = new ArrayList<>();
-        allTasksList = getArguments().getParcelableArrayList(ALL_TASKS_LIST);
+//        allTasksList = getArguments().getParcelableArrayList(ALL_TASKS_LIST);
         //TODO - find where allTasksList is declared as List instead of ArrayList and fix, or why "List" is required in this Parcelable instead of ArrayList
-        allTasksList.add(new Task());
+
     }
 
     public static ViewAllFragment newInstance() {

@@ -25,13 +25,32 @@ import butterknife.ButterKnife;
 
 import static com.example.alexandrareinhart.donedidit.MainActivity.ALL_TASKS_LIST;
 
-public class ViewAllFragment extends Fragment {
+public class ViewAllFragment extends Fragment implements TaskAdapter.AdapterCallback {
 
     @BindView(R.id.view_all_recycler)
     protected RecyclerView viewAllRecycler;
     private List<Task> allTasksList;
     private TaskAdapter taskAdapter;
     private TaskDatabase taskDatabase;
+    private AllTasksCallback allTasksCallback;
+
+    public void attachView(AllTasksCallback allTasksCallback) {
+        this.allTasksCallback = allTasksCallback;
+    }
+
+    @Override
+    public void rowClicked(Task task) {
+
+    }
+
+    @Override
+    public void rowLongClicked(Task task) {
+
+    }
+
+    public interface AllTasksCallback{
+        void addClicked();
+    }
 
 
     public ViewAllFragment() {
@@ -43,10 +62,6 @@ public class ViewAllFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_all, container, false);
         ButterKnife.bind(this, view);
-//        TaskAdapter taskAdapter = new TaskAdapter(getContext(), taskList);
-//        taskAdapter = new TaskAdapter(taskDatabase.taskDao().getTasks(), this);
-        viewAllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        viewAllRecycler.setAdapter(taskAdapter);
         return view;
     }
 
@@ -56,9 +71,18 @@ public class ViewAllFragment extends Fragment {
 
         taskDatabase = ((TaskApplication) getActivity().getApplication()).getDatabase();
         allTasksList = new ArrayList<>();
-//        allTasksList = getArguments().getParcelableArrayList(ALL_TASKS_LIST);
-        //TODO - find where allTasksList is declared as List instead of ArrayList and fix, or why "List" is required in this Parcelable instead of ArrayList
+        assert getArguments() != null;
+        allTasksList = getArguments().getParcelableArrayList(ALL_TASKS_LIST);
+        populateView();
 
+    }
+
+    private void populateView() {
+
+        TaskAdapter taskAdapter = new TaskAdapter(allTasksList, this);
+
+        viewAllRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        viewAllRecycler.setAdapter(taskAdapter);
     }
 
     public static ViewAllFragment newInstance() {

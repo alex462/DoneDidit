@@ -110,9 +110,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
         addNewFragment.attachParent(this);
 
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelableArrayList(ALL_TASKS_LIST, (ArrayList<? extends Parcelable>) allTasksList);
-//        viewAllFragment.setArguments(bundle);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(ALL_TASKS_LIST, (ArrayList<? extends Parcelable>) allTasksList);
+        viewAllFragment.setArguments(bundle);
 
         mainRecycler.setAdapter(taskAdapter);
         taskAdapter = new TaskAdapter(allTasksList, this);

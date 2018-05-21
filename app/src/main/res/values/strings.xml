@@ -29,4 +29,5 @@
     <string name="details_all_caps">DETAILS</string>
     <string name="due_variable">DUE %1$S</string>
     <string name="ok_all_caps">OK</string>
+    <string name="due_all_caps">DUE </string>
 </resources>

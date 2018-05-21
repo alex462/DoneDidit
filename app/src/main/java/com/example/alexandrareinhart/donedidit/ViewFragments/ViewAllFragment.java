@@ -71,8 +71,8 @@ public class ViewAllFragment extends Fragment implements TaskAdapter.AdapterCall
 
         taskDatabase = ((TaskApplication) getActivity().getApplication()).getDatabase();
         allTasksList = new ArrayList<>();
-        assert getArguments() != null;
-        allTasksList = getArguments().getParcelableArrayList(ALL_TASKS_LIST);
+
+
         populateView();
 
     }

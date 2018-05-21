@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.alexandrareinhart.donedidit.ViewFragments.AddNewFragment;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
     private List<Task> completedTasksList;
     private AddNewFragment addNewFragment;
     private ViewAllFragment viewAllFragment;
+    private EditTaskFragment editTaskFragment;
     public static final String ALL_TASKS_LIST = "all_tasks_list";
 
     @BindView(R.id.tab_layout)
@@ -110,14 +112,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
         addNewFragment.attachParent(this);
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(ALL_TASKS_LIST, (ArrayList<? extends Parcelable>) allTasksList);
-        viewAllFragment.setArguments(bundle);
+
 
         mainRecycler.setAdapter(taskAdapter);
         taskAdapter = new TaskAdapter(allTasksList, this);
         taskAdapter.updateList(taskDatabase.taskDao().getTasks());
-
 
 
         View view = this.getCurrentFocus();
@@ -206,6 +205,36 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
                         taskAdapter.updateList(taskDatabase.taskDao().getTasks());
 
                         Toast.makeText(MainActivity.this, "TASK COMPLETED", Toast.LENGTH_LONG).show(); //Toast to confirm completed
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private void editTask(final Task task) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Edit task?")
+                .setMessage("Are you sure you want to edit this task?")
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditTaskFragment editTaskFragment = EditTaskFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList(ALL_TASKS_LIST, (ArrayList<? extends Parcelable>) allTasksList);
+                        EditTaskFragment.setArguments(bundle);
+                        //update database with task info
+                        taskDatabase.taskDao().updateTask(task);
+                        //inform adapter; adapter updates view accordingly
+                        taskAdapter.updateList(taskDatabase.taskDao().getTasks());
+
+                        Toast.makeText(MainActivity.this, "TASK UPDATED", Toast.LENGTH_LONG).show(); //Toast to confirm completed
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

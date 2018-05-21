@@ -13,10 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.example.alexandrareinhart.donedidit.MainActivity.ALL_TASKS_LIST;
 
@@ -42,12 +44,12 @@ public class EditTaskFragment extends Fragment {
     private TaskCallback taskCallback;
     private List<Task> allTasksList;
 
-    private void attachView(TaskCallback taskCallback) {
+    public void attachView(TaskCallback taskCallback) {
         this.taskCallback = taskCallback;
     }
 
     public interface TaskCallback {
-        void editTask();
+        void editTask(String taskTitle, String taskDetails, String date);
     }
 
     @Nullable
@@ -72,5 +74,10 @@ public class EditTaskFragment extends Fragment {
         super.onStart();
         allTasksList = new ArrayList<>();
         allTasksList = getArguments().getParcelableArrayList(ALL_TASKS_LIST);
+    }
+
+    @OnClick(R.id.ok_dismiss_dialog_button)
+    protected void okButtonClicked() {
+        taskCallback.editTask(this.editTaskTitle.getText().toString(), this.editTaskDetails.getText().toString(), this.editTaskDueDate.getText().toString());
     }
 }

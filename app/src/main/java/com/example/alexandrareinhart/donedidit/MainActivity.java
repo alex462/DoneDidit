@@ -27,7 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements TaskAdapter.AdapterCallback, AddNewFragment.ActivityCallback {
+public class MainActivity extends AppCompatActivity implements TaskAdapter.AdapterCallback, EditTaskFragment.TaskCallback, AddNewFragment.ActivityCallback {
 
 
     private ViewPagerAdapter viewPagerAdapter;
@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
     protected ViewPager viewPager;
     @BindView(R.id.main_recycler_view)
     protected RecyclerView mainRecycler;
-//    @BindView(R.id.view_all_recycler)
-//    protected RecyclerView viewAllRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
         taskAdapter.notifyDataSetChanged();
     }
 
-    @Override
     public void addClicked() {
 
         setUpRecyclerView();
@@ -128,25 +125,30 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
     @Override
     public void rowClicked(Task task) {
-        if(task.isCompleted()){
+        editTask();
+    }
+
+    @Override
+    public void rowLongClicked(final Task task) {
+
+        if(task.isCompleted()) {
             markIncomplete(task);
         } else {
             markCompleted(task);
         }
     }
 
-    @Override
-    public void rowLongClicked(final Task task) {
+    private void deleteTask(Task task) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Task Completed?")
-                .setMessage("Are you sure you want to mark this task \"completed\"?")
+        builder.setTitle("DELETE TASK?")
+                .setMessage("Are you sure you want to delete this task?")
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                         taskDatabase.taskDao().deleteTask(task); //delete task from database
                         taskAdapter.updateList(taskDatabase.taskDao().getTasks()); //adapter updates view
-                        Toast.makeText(MainActivity.this, "TASK COMPLETED", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "TASK DELETED", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -160,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
 
     }
 
-    @Override
     public void saveTask(Task task){
         allTasksList.add(task);
         Toast.makeText(this, "TASK ADDED", Toast.LENGTH_LONG).show();
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
     private void markIncomplete(final Task task) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Mark task incomplete?")
+        builder.setTitle("MARK TASK INCOMPLETE?")
                 .setMessage("Are you sure you want to mark this task as \"incomplete\"?")
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
@@ -193,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
     private void markCompleted(final Task task) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Mark task complete?")
+        builder.setTitle("MARK TASK COMPLETED?")
                 .setMessage("Are you sure you want to mark this task as \"completed\"?")
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
@@ -217,7 +218,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
                 .show();
     }
 
-    private void editTask(final Task task) {
+
+    @Override
+    public void editTask() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Edit task?")
@@ -226,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Adapt
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         EditTaskFragment editTaskFragment = EditTaskFragment.newInstance();
+                        editTaskFragment.attachView(this);
                         Bundle bundle = new Bundle();
                         bundle.putParcelableArrayList(ALL_TASKS_LIST, (ArrayList<? extends Parcelable>) allTasksList);
                         EditTaskFragment.setArguments(bundle);
